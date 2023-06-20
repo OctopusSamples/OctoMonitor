@@ -2,9 +2,7 @@ name: AWS deploy-monitor
 
 on:
   push:
-    paths:
-      - 'aws/deploy-monitor/accept-message/**'
-      - 'aws/deploy-monitor/process-message/**'
+    branches: [ "main" ]
 
   workflow_dispatch:
 
