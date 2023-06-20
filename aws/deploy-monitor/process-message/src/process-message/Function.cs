@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using Newtonsoft.Json;
@@ -53,9 +49,9 @@ public class Function
         LambdaLogger.Log(string.Format("Retrieved environment variables, Octopus Server Url: {0}...", octopusServerUrl));
 
         // Deserialize message JSON
-        LambdaLogger.Log(string.Format("Parsing message..."));
-        OctopusMessage octopusMessage = JsonConvert.DeserializeObject(message.Body);
-        LambdaLogger.Log("Successfully parsed message JSON with {0} type ({1})", octopusMessage.EventType, octopusMessage.Timestamp);
+        LambdaLogger.Log("Parsing message...");
+        OctopusMessage octopusMessage = JsonConvert.DeserializeObject<OctopusMessage>(message.Body);
+        LambdaLogger.Log(string.Format("Successfully parsed message JSON with {0} type ({1})", octopusMessage.EventType, octopusMessage.Timestamp));
 
         // Create Octopus client object
         LambdaLogger.Log("Creating server endpoint object ...");
@@ -72,20 +68,32 @@ public class Function
         Octopus.Client.IOctopusSpaceRepository repositoryForSpace = client.ForSpace(space);
 
         // Process event
-
         var payload = octopusMessage.Payload;
         var @event = payload.Event;
         var eventCategory = @event.Category;
 
-        switch (eventCategory) {
+        switch (eventCategory)
+        {
             case "DeploymentFailed":
                 ProcessFailure(payload);
-            case default:
-                ProcessGeneralMessage(payload);    
+                break;
+            default:
+                ProcessGeneralMessage(payload);
+                break;
         }
 
-        LambdaLogger.Log("Completed processing of message {0} type ({1})", octopusMessage.EventType, octopusMessage.Timestamp);
+        LambdaLogger.Log(string.Format("Completed processing of message {0} type ({1})", octopusMessage.EventType, octopusMessage.Timestamp));
 
         await Task.CompletedTask;
+    }
+
+    private void ProcessGeneralMessage(Payload payload)
+    {
+        LambdaLogger.Log(string.Format("Processing event {0} through general route", payload.Event.Category));
+    }
+
+    private void ProcessFailure(Payload payload)
+    {
+        LambdaLogger.Log(string.Format("Processing event {0} through failure route", payload.Event.Category));
     }
 }
