@@ -42,7 +42,7 @@ jobs:
         run: dotnet restore
 
       - name: Publish process-message
-        run: dotnet publish aws/deploy-monitor/process-message/src/process-message/process-message.csproj -r linux-x64--configuration Release --no-restore --output "artifacts/process-message"
+        run: dotnet publish aws/deploy-monitor/process-message/src/process-message/process-message.csproj -r linux-x64 --configuration Release --no-restore --output "artifacts/process-message"
 
       - name: Package deploy-monitor/process-message
         uses: OctopusDeploy/create-zip-package-action@v3
