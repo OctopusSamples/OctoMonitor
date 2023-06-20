@@ -48,7 +48,7 @@ jobs:
           files: |
             **/*.*
           
-      - name: Push OPS packages to Octopus 🐙
+      - name: Push packages to Octopus 🐙
         uses: OctopusDeploy/push-package-action@v3
       
         with:  
