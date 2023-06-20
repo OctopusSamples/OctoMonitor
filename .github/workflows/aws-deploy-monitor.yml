@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'aws/deploy-monitor/accept-message/**'
+      - 'aws/deploy-monitor/process-message/**'
 
   workflow_dispatch:
 
