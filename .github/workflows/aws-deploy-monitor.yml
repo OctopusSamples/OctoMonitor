@@ -71,6 +71,7 @@ jobs:
         with:  
           packages: |
             artifacts/deploy-monitor.accept-message.${{ steps.version-generator.outputs.version }}.zip
+            artifacts/deploy-monitor.process-message.${{ steps.version-generator.outputs.version }}.zip
 
   Push-build-information:
        
