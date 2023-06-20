@@ -43,7 +43,7 @@ jobs:
 
       - name: Publish process-message
         working-directory: aws/deploy-monitor/process-message/src/process-message
-        run: dotnet publish --configuration Release --no-restore --output "artifacts/process-message"
+        run: dotnet publish -r linux-x64--configuration Release --no-restore --output "artifacts/process-message"
 
       - name: Package deploy-monitor/process-message
         uses: OctopusDeploy/create-zip-package-action@v3
