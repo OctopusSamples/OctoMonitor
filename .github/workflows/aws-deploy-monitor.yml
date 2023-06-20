@@ -55,7 +55,7 @@ jobs:
           packages: |
             artifacts/deploy-monitor.accept-message.${{ steps.version-generator.outputs.version }}.zip
 
-  Push build information:
+  Push-build-information:
        
       name: Push Build Information to Octopus 🐙
       needs: build 
@@ -75,7 +75,7 @@ jobs:
           packages: |
             deploy-monitor.accept-message
     
-  Create Octopus Release:
+  Create-Octopus-Release:
   
       name: Create Octopus Release 🐙
       needs: [build, Push-build-information]
