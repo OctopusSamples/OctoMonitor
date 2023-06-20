@@ -35,9 +35,25 @@ jobs:
         run: |
           mkdir "artifacts"
           mkdir "artifacts/process-message"
-
-      # TODO: Build process-message
               
+      - name: Restore dependencies for process-message
+        working-directory: aws/deploy-monitor/process-message/src/process-message
+        run: dotnet restore
+
+      - name: Build process-message
+        working-directory: aws/deploy-monitor/process-message/src/process-message
+        run: dotnet build --configuration Release --no-restore --output "artifacts/process-message"
+
+      - name: Package deploy-monitor/process-message
+        uses: OctopusDeploy/create-zip-package-action@v3
+        with:
+          package_id: 'deploy-monitor.process-message'
+          version: ${{ steps.version-generator.outputs.version }}
+          output_folder: artifacts
+          base_path: artifacts/process-message
+          files: |
+            **/*.*
+
       - name: Package deploy-monitor/accept-message
         uses: OctopusDeploy/create-zip-package-action@v3
         with:
@@ -46,7 +62,7 @@ jobs:
           output_folder: artifacts
           base_path: aws/deploy-monitor/accept-message
           files: |
-            **/*.*
+            **/*.* 
           
       - name: Push packages to Octopus 🐙
         uses: OctopusDeploy/push-package-action@v3
